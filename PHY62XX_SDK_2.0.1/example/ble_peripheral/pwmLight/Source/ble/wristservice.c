@@ -57,7 +57,7 @@
 #include "log.h"
 #include "app_err.h"
 #include "error.h"
-
+#include "adcCaptrue.h"
 /*********************************************************************
  * MACROS
  */
@@ -493,7 +493,7 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
   LOG("RX Cmd:");
   print_hex(data, len);
   
-
+  adc_ProcessEvent(adcDemo_TaskID,adcMeasureTask_EVT);
   if(chksum != checksum(data, len-1)){
     err_data = WRIST_CMD_UNKNOW;
     return cmd_response_err(&err_data, sizeof(err_data), APP_ERR_CRC);
