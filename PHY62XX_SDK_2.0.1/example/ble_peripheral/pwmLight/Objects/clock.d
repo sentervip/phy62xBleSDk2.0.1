@@ -1,0 +1,17 @@
+.\objects\clock.o: ..\..\..\components\driver\clock\clock.c
+.\objects\clock.o: ..\..\..\components\inc\ap_cp.h
+.\objects\clock.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\Device\ARM\ARMCM0\Include\ARMCM0.h
+.\objects\clock.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\core_cm0.h
+.\objects\clock.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\clock.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\cmsis_version.h
+.\objects\clock.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\cmsis_compiler.h
+.\objects\clock.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\cmsis_armcc.h
+.\objects\clock.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\Device\ARM\ARMCM0\Include\system_ARMCM0.h
+.\objects\clock.o: ..\..\..\components\common\hal_defs.h
+.\objects\clock.o: ..\..\..\components\common\hal_mcu.h
+.\objects\clock.o: ..\..\..\components\inc\types.h
+.\objects\clock.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\clock.o: ..\..\..\components\driver\clock\clock.h
+.\objects\clock.o: ..\..\..\components\driver\common\common.h
+.\objects\clock.o: ..\..\..\components\driver\gpio\gpio.h
+.\objects\clock.o: ..\..\..\components\inc\global_config.h

@@ -47,7 +47,7 @@
 #include "OSAL.h"
 #include "adcCaptrue.h"
 #include "log.h"
-
+#include <math.h>
 
 
 
@@ -166,16 +166,23 @@ static void adc_ProcessOSALMsg( osal_event_hdr_t *pMsg )
 
 static void adc_evt(adc_Evt_t* pev)
 {
+	uint32_t sum = 0; 
+	uint32_t ave = 0; 
 	LOG("enter adc:");	
   if(pev->type == HAL_ADC_EVT_DATA){
       float value = hal_adc_value_cal(pev->ch,pev->data, pev->size, FALSE, FALSE);
       //float value = hal_adc_value(pev->data, pev->size, FALSE, FALSE);
-    for(uint8_t i=0;i<pev->size;i++)
+    //for(uint8_t i=0;i<pev->size;i++)
+	 for(uint8_t i=0;i<ADC_CODE_LEN;i++)
     {
-        LOG("%x\n",pev->data[i]);
+        LOG(" %x,",pev->data[i]);
+		    sum += pev->data[i];
+			//rms += 	pev->data[i]*pev->data[i];
     }
-    
-  	LOG("batt_measure_evt %d\n",(int)(value*1000));
+	ave = sum/ADC_CODE_LEN;
+	LOG("ave:0x%x,Vin=%d mV\n",ave,(ave*1000)/4096);
+    //LOG("ave:0x%x,rms:0x%x \n",sum/5,(uint32_t)sqrt(rms/5));
+  	//LOG("batt_measure_evt %d\n",(int)(value*1000));
   }
 }
 
@@ -184,12 +191,12 @@ static void adcMeasureTask( void )
 {
   int ret;
     bool batt_mode = FALSE;
-    adc_CH_t channel = ADC_CH3P;
+    adc_CH_t channel = ADC_CH2P_P14;  //|ADC_CH3N_P15
     GPIO_Pin_e pin = s_pinmap[channel];
   adc_Cfg_t cfg = {
       .is_continue_mode = FALSE,
       .is_differential_mode = FALSE,
-      .is_high_resolution = FALSE,
+      .is_high_resolution = 0xff,  //bypass
       .is_auto_mode = FALSE,
     };
   if(!batt_mode)

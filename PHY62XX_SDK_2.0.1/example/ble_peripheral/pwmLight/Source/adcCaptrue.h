@@ -54,7 +54,7 @@ extern "C"
  * CONSTANTS
  */
 
-
+#define ADC_CODE_LEN        10
 // Heart Rate Task Events
 #define adcMeasureTask_EVT                            0x0080
 
