@@ -534,6 +534,11 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
 //    
   case  WRIST_CMD_LIGHT_CTRL:
     ret = cmd_light_ctrl(data, len);
+	if(data[3] == 0){
+	    ctrl_led(0);
+	}else{
+	    ctrl_led(1);
+	}
     break;
     
 //  case  WRIST_CMD_MSG_NOTIF:

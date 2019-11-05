@@ -48,9 +48,14 @@
 #include "adcCaptrue.h"
 #include "log.h"
 #include <math.h>
+#include "gpio.h"
 
 
-
+void ctrl_led(int level)
+{
+	hal_gpio_pin_init(LEDOUT, OEN);
+	hal_gpio_fast_write(LEDOUT, level);
+}
 
 /*********************************************************************
  * TYPEDEFS

@@ -160,21 +160,37 @@ static gaprole_States_t gapProfileState = GAPROLE_INIT;
   'o',
 };*/
 
+//static uint8 scanData[] =
+//{
+//  0xa,   // length of this data
+//  GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+//  'A',
+//  'P',
+//  'h',
+//  'y',
+//  'L',
+//  'i',
+//  'g',
+//  'h',
+//  't',
+//  ' ',
+//};
 static uint8 scanData[] =
 {
-  0xa,   // length of this data
+	0xc,   // length of this data
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-  'P',
-  'h',
-  'y',
+  'D',
+  'I',
+  'A',
   'L',
-  'i',
-  'g',
-  'h',
-  't',
+  'O',
+  'G',
+  '_',
+  '2',
+  '0',
+  '1',
   ' ',
 };
-
 
 static uint8 advertData[] = 
 { 
@@ -190,8 +206,8 @@ static uint8 advertData[] =
 };
 
 // Device name attribute value
-static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "PhyLight ";
-
+//static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "PhyLight";
+static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "DIALOG_201";
 // GAP connection handle
 static uint16 gapConnHandle;
 
