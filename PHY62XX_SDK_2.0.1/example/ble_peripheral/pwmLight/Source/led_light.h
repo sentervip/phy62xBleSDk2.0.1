@@ -35,7 +35,10 @@
 #define _LED_LIGHT_H
 
 #include "types.h"
-
+#define LEDOUT    18
+#define RGBOUT    20
+void ctrl_led(int level);
+void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char g,unsigned  char b);
 void light_timeout_handle(void);
 int light_ctrl(uint8_t ch, uint8_t value);
 int light_init(void);

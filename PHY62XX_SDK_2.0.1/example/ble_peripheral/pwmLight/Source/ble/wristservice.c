@@ -58,6 +58,7 @@
 #include "app_err.h"
 #include "error.h"
 #include "adcCaptrue.h"
+#include "common.h"
 /*********************************************************************
  * MACROS
  */
@@ -536,7 +537,12 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
     ret = cmd_light_ctrl(data, len);
 	if(data[3] == 0){
 	    ctrl_led(0);
+		  ctrl_rgb(0,0,0x00,0x00,0xff);
+	}else if(data[3] == 1){
+		ctrl_led(1);
 	}else{
+		ctrl_led(0);
+		WaitMs(100);
 	    ctrl_led(1);
 	}
     break;

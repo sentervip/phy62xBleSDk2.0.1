@@ -98,6 +98,7 @@ static void hal_init(void)
   hal_pwrmgr_RAM_retention(RET_SRAM0|RET_SRAM1|RET_SRAM2|RET_SRAM3|RET_SRAM4);
   
   //LOG_INIT();
+  
   hal_gpio_init();
   hal_adc_init();
 	

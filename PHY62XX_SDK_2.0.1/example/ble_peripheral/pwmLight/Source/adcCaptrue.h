@@ -53,7 +53,7 @@ extern "C"
 /*********************************************************************
  * CONSTANTS
  */
-#define LEDOUT    18   
+
 #define ADC_CODE_LEN        10
 // Heart Rate Task Events
 #define adcMeasureTask_EVT                            0x0080
@@ -65,7 +65,7 @@ extern uint8 adcDemo_TaskID;
 /*********************************************************************
  * FUNCTIONS
  */
-void ctrl_led(int level);
+
 /*
  * Task Initialization for the BLE Application
  */
