@@ -65,6 +65,7 @@
 #include "led_light.h"
 #include "kscan.h"
 #include "log.h"
+#include "key.h"
 
 /*********************************************************************
  * MACROS
@@ -191,7 +192,11 @@ static uint8 scanData[] =
   '1',
   ' ',
 };
-
+void on_touchKey(touch_evt_t key_evt)
+{
+  
+  osal_set_event(AppWrist_TaskID, TOUCH_PRESS_EVT);
+}
 static uint8 advertData[] = 
 { 
   // flags
@@ -424,6 +429,7 @@ void appWristInit( uint8 task_id )
   // Setup a delayed profile startup
   osal_set_event( AppWrist_TaskID, START_DEVICE_EVT );
   light_init();
+	key_init(on_touchKey);
   //hal_gpio_pull_set(P31, PULL_DOWN);
 //  light_ctrl(0,10);
 //  light_ctrl(1,50);

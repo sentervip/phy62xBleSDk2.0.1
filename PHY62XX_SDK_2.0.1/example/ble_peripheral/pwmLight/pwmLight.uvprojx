@@ -474,6 +474,11 @@
               <FileType>1</FileType>
               <FilePath>.\Source\adcCaptrue.c</FilePath>
             </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\key.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
