@@ -43,123 +43,126 @@
 #define GPIO_YELLOW   P23//P31
 #define GPIO_RED      P32
 
-//add by aizj
-#define us5 7
-#define us15 7
+
 
 static uint16_t s_light[3];
 //static uint8_t s_light_en[3];
 void delay_us(unsigned int t)
-{
-	WaitUs(t);
+{   
+    if(t == 1){
+        for(unsigned int i=0; i<50000;i++)
+            for(unsigned int j=0; j<500000;j++);
+    }else{
+        WaitUs(t);
+    }
 }
 void ctrl_led(int level)
 {
-	hal_gpio_pin_init(LEDOUT, OEN);
-	hal_gpio_fast_write(LEDOUT, level);
+    
+    hal_gpio_fast_write(LEDOUT, level);
 }
 
 void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char g,unsigned  char b)
 {
-	unsigned char j,tmp,i;
-	unsigned int ii;
+    unsigned char j,tmp,i;
+    unsigned int ii;
 
-//	a0=0xff;
-	hal_gpio_pin_init(RGBOUT, OEN);
-	hal_gpio_fast_write(RGBOUT, 1);
-	tmp=0x1;
-	for(j=0;j<6;j++)
-	{
-		hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		delay_us(us5);
-		if ((a0&tmp)==0) 
-		{
-			hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
-		}else{
-			hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		}
-		delay_us(us15);
-		tmp=tmp<<1;
-		hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
-		delay_us(10);
-	}
+   // r=0xff;
+    
 
-	tmp=0x1;
-	for(j=0;j<4;j++)
-	{
-		hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		delay_us(us5);
-		//if ((a1&tmp)==0) {P1=(P1|0x8);} else {P1=P1&0xF7;}delay_us(us15);
-		if ((a1&tmp)==0) 
-		{
-			hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
-		}else{
-			hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		}
-		delay_us(us15);
-		tmp=tmp<<1;
-		hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
-		delay_us(10);
-	}
-	tmp=0x1;
-	for(j=0;j<6;j++)
-	{
-		hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		delay_us(us5);
-		//if ((r&tmp)==0) {P1=(P1|0x8);} else {P1=P1&0xF7;}delay_us(us15);
-		if ((r & tmp)==0) 
-		{
-			hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
-		}else{
-			hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		}
-		delay_us(us15);
-		tmp=tmp<<1;
-		hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
-		delay_us(10);
-	}
+    //hal_gpio_pin_init(RGBOUT, OEN);
+    hal_gpio_fast_write(RGBOUT, 1);
+    tmp=0x1;
+    for(j=0;j<6;j++)
+    {
+        hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        delay_us(us5);
+        if ((a0&tmp)==0) 
+        {
+            hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
+        }else{
+            hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        }
+        delay_us(us5);
+        tmp=tmp<<1;
+        hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
+        delay_us(us10);
+    }
 
-	tmp=0x1;
-	for(j=0;j<6;j++)
-	{
-		hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		delay_us(us5);
-		//if ((r&tmp)==0) {P1=(P1|0x8);} else {P1=P1&0xF7;}delay_us(us15);
-		if ((g & tmp)==0) 
-		{
-			hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
-		}else{
-			hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		}
-		delay_us(us15);
-		tmp=tmp<<1;
-		hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
-		delay_us(10);
-	}
+    tmp=0x1;
+    for(j=0;j<4;j++)
+    {
+        hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        delay_us(us5);
+        if ((a1&tmp)==0) 
+        {
+            hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
+        }else{
+            hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        }
+        delay_us(us5);
+        tmp=tmp<<1;
+        hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
+        delay_us(us10);
+    }
+   
+    tmp=0x1;
+    for(j=0;j<6;j++)
+    {
+        hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        delay_us(us5);
+        if ((r&tmp)==0) 
+        {
+            hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
+        }else{
+            hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        }
+        delay_us(us5);
+        tmp=tmp<<1;
+        hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
+        delay_us(us10);
+    }
+    tmp=0x1;
+    for(j=0;j<6;j++)
+    {
+        hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        delay_us(us5);
+        if ((g&tmp)==0) 
+        {
+            hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
+        }else{
+            hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        }
+        delay_us(us5);
+        tmp=tmp<<1;
+        hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
+        delay_us(us10);
+    }
 
-	tmp=0x1;
-	for(j=0;j<6;j++)
-	{
-		hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		delay_us(us5);
-		//if ((r&tmp)==0) {P1=(P1|0x8);} else {P1=P1&0xF7;}delay_us(us15);
-		if ((b & tmp)==0) 
-		{
-			hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
-		}else{
-			hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
-		}
-		delay_us(us15);
-		tmp=tmp<<1;
-		hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
-		delay_us(10);
-	}
+    tmp=0x1;
+    for(j=0;j<6;j++)
+    {
+        hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        delay_us(us5);
+        if ((b&tmp)==0) 
+        {
+            hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);
+        }else{
+            hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7;
+        }
+        delay_us(us5);
+        tmp=tmp<<1;
+        hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8); 
+        delay_us(us10);
+    }
 
+    
 //delay_us(us5);
-	hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7; 
-	delay_us(36);
-	hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);  
-	delay_us(36);	
+    hal_gpio_fast_write(RGBOUT, 0);//P1=P1&0xF7; 
+    delay_us(us20);
+    hal_gpio_fast_write(RGBOUT, 1);//P1=(P1|0x8);  
+    delay_us(us20);   
+
 }
 
 static void light_start_timer(void)
@@ -259,7 +262,7 @@ int light_ctrl(uint8_t ch, uint8_t value)
   s_light[ch] = (uint16_t)value;
 
   light_reflash();
-	return PPlus_SUCCESS;
+    return PPlus_SUCCESS;
 }
 
 

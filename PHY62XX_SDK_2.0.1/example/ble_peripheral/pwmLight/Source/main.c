@@ -50,6 +50,7 @@
 #include "pwrmgr.h"
 #include "string.h"
 #include "phy_console.h"
+#include "led_light.h"
 
 extern void  ble_main(void);
 
@@ -71,20 +72,20 @@ static void rf_wakeup_handler(void){
 
 void cons_callback(uint16_t cmd_id, uint8_t argc, char** argv)
 {
-	LOG("cmd id is 0x%x, parameter num is %d\n", cmd_id, argc);
-	for(uint8_t i = 0; i<argc; i++){
-		LOG("param %d : %s\n", i, argv[i]);
-	}
+    LOG("cmd id is 0x%x, parameter num is %d\n", cmd_id, argc);
+    for(uint8_t i = 0; i<argc; i++){
+        LOG("param %d : %s\n", i, argv[i]);
+    }
 }
 
 const cons_cmd_t s_cmd_list[] = {
-	{0x0010, "cmd1"},
-	{0x0011, "cmd2"},
-	{0x0012, "cmd3"},
-	{0x0013, "cmd4"},
-	{0x0014, "cmd5"},
-	{0x0015, "cmd6"},
-	{0, NULL},
+    {0x0010, "cmd1"},
+    {0x0011, "cmd2"},
+    {0x0012, "cmd3"},
+    {0x0013, "cmd4"},
+    {0x0014, "cmd5"},
+    {0x0015, "cmd6"},
+    {0, NULL},
 };
 
 static void hal_init(void)
@@ -101,9 +102,11 @@ static void hal_init(void)
   
   hal_gpio_init();
   hal_adc_init();
-	
-	console_init(s_cmd_list, cons_callback);
-	
+  hal_gpio_pin_init(LEDOUT, OEN);   
+  hal_gpio_pin_init(RGBOUT, OEN);
+  //hal_gpio_pull_set(RGBOUT, WEAK_PULL_UP);
+    console_init(s_cmd_list, cons_callback);
+    
   LOG("all driver init OK!\n");
 
 }
@@ -148,16 +151,16 @@ int  main(void)
     g_clk32K_config = CLK_32K_XTAL;//CLK_32K_XTAL,CLK_32K_RCOSC
     
     osal_mem_set_heap((osalMemHdr_t *)g_largeHeap, LARGE_HEAP_SIZE);
-	
+    
     init_config();
 
     hal_pwrmgr_init();
 
     hal_rfphy_init();  
-    							
+                                
     hal_init();
 
-    app_main();	
+    app_main(); 
 
 }
 

@@ -35,6 +35,11 @@
 #define _LED_LIGHT_H
 
 #include "types.h"
+
+//add by aizj
+#define us5 1
+#define us10 (us5*2)
+#define us20 (us5*18)//(us5*18)
 #define LEDOUT    18
 #define RGBOUT    20
 void ctrl_led(int level);
