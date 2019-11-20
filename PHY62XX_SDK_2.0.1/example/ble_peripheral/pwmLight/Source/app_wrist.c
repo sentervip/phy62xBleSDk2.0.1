@@ -178,7 +178,7 @@ static gaprole_States_t gapProfileState = GAPROLE_INIT;
 //};
 static uint8 scanData[] =
 {
-	0xc,   // length of this data
+    0xc,   // length of this data
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
   'D',
   'I',
@@ -294,16 +294,16 @@ static const gapBondCBs_t WristBondCB =
 
 //void on_kscan_evt(kscan_Evt_t* kscan_evt)
 //{
-//	uint8_t key[16];
+//  uint8_t key[16];
 //  uint8_t r,c,k;
 //  osal_memset(key, 0, 16);
-//	LOG("KSE %d\n",kscan_evt->num);
-//	for(uint8_t i=0;i<kscan_evt->num;i++){
+//  LOG("KSE %d\n",kscan_evt->num);
+//  for(uint8_t i=0;i<kscan_evt->num;i++){
 //    k = kscan_evt->keys[i].type == KEY_PRESSED ? 1:2;
 //    r = kscan_evt->keys[i].row &0x7;
 //    c = kscan_evt->keys[i].col &0x7;
 //    key[i] = (k << 6)|(c << 3)| r;
-//	}
+//  }
 //  wristProfileResponseKScan(kscan_evt->num, key);
 //}
 
@@ -313,7 +313,7 @@ static const gapBondCBs_t WristBondCB =
 //  if(pev->ev == wmi_event){
 //    int i;
 //    int gx = 0,gy = 0,gz = 0;
-//  	int16_t *acc_data = (int16_t *)pev->data;
+//      int16_t *acc_data = (int16_t *)pev->data;
 //    for(i = 0; i < pev->size/(sizeof(int16_t)*3); i++)
 //    {
 //      gx += (int)acc_data[0];
@@ -360,7 +360,7 @@ static const gapBondCBs_t WristBondCB =
 void appWristInit( uint8 task_id )
 {
   AppWrist_TaskID = task_id;
-	LOG("\n\n\nappWristInit\n\n\n");
+    LOG("\n\n\nappWristInit\n\n\n");
   // Setup the GAP Peripheral Role Profile
   {
     uint8 initial_advertising_enable = TRUE;
@@ -377,13 +377,13 @@ void appWristInit( uint8 task_id )
     uint16 desired_slave_latency = DEFAULT_DESIRED_SLAVE_LATENCY;
     uint16 desired_conn_timeout = DEFAULT_DESIRED_CONN_TIMEOUT;
     uint8 peerPublicAddr[] = {
-			0x01,
-			0x02,
-			0x03,
-			0x04,
-			0x05,
-			0x06
-		};
+            0x01,
+            0x02,
+            0x03,
+            0x04,
+            0x05,
+            0x06
+        };
 
     GAPRole_SetParameter(GAPROLE_ADV_DIRECT_ADDR, sizeof(peerPublicAddr), peerPublicAddr);
     // set adv channel map
@@ -429,7 +429,7 @@ void appWristInit( uint8 task_id )
   // Setup a delayed profile startup
   osal_set_event( AppWrist_TaskID, START_DEVICE_EVT );
   light_init();
-	key_init(on_touchKey);
+    key_init(on_touchKey);
   //hal_gpio_pull_set(P31, PULL_DOWN);
 //  light_ctrl(0,10);
 //  light_ctrl(1,50);
@@ -441,7 +441,7 @@ void appWristInit( uint8 task_id )
 //  touch_init(on_touchKey);
 //  ui_init();
 //  batt_init();
-//	kx023_init(on_kx023_evt);
+//  kx023_init(on_kx023_evt);
 //  {
 //    kscan_Cfg_t kcfg;
 //    kcfg.ghost_key_state = NOT_IGNORE_GHOST_KEY;
@@ -472,6 +472,12 @@ uint16 appWristProcEvt( uint8 task_id, uint16 events )
   
   VOID task_id; // OSAL required parameter that isn't used in this function
 
+  if( events & TIMER_RGBLED_REFLASH_EVT)
+  {
+      ctrl_rgb(0,0,32,0,50);  //LOG("40ms");
+      return ( events ^ TIMER_RGBLED_REFLASH_EVT);
+  }
+  
   if ( events & SYS_EVENT_MSG )
   {
     uint8 *pMsg;
@@ -543,13 +549,13 @@ uint16 appWristProcEvt( uint8 task_id, uint16 events )
 //  }
 //  if( events & ACC_DATA_EVT)
 //  {
-//		drv_kx023_event_handle();
+//      drv_kx023_event_handle();
 //    return ( events ^ ACC_DATA_EVT);
 //  }
   
   if( events & TIMER_LIGHT_EVT)
   {
-		light_timeout_handle();
+        light_timeout_handle();
     return ( events ^ TIMER_LIGHT_EVT);
   }
   
@@ -677,7 +683,7 @@ static void wristCB(uint8 event, uint8 param_size, uint8* param)
 {
   switch(event){
 
-		case WRIST_NOTI_ENABLED:
+        case WRIST_NOTI_ENABLED:
   {
     // if connected start periodic measurement
     if (gapProfileState == GAPROLE_CONNECTED)

@@ -70,7 +70,7 @@
 #define ACC_DATA_EVT                            0x0100  //event for accelerator data change
 #define TIMER_LIGHT_EVT                         0x0200  //for led light timeout
 #define TIMER_KSCAN_DEBOUNCE_EVT                0x0400  //for keyscan debounce
-
+#define TIMER_RGBLED_REFLASH_EVT                0x0800  //for rgb reflash
 
 
 /*********************************************************************

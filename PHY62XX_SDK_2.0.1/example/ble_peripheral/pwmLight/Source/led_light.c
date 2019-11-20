@@ -50,8 +50,9 @@ static uint16_t s_light[3];
 void delay_us(unsigned int t)
 {   
     if(t == 1){
-        for(unsigned int i=0; i<50000;i++)
-            for(unsigned int j=0; j<500000;j++);
+        //for(unsigned int i=0; i<5;i++)
+          //  for(unsigned int j=0; j<50000;j++);
+        WaitUs(t);
     }else{
         WaitUs(t);
     }
@@ -168,6 +169,7 @@ void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char
 static void light_start_timer(void)
 {
   osal_start_timerEx(AppWrist_TaskID, TIMER_LIGHT_EVT, 30*1000);
+  
 }
 static void light_stop_timer(void)
 {
@@ -280,6 +282,8 @@ int light_init(void)
   //hal_gpio_pull_set(GPIO_GREEN, STRONG_PULL_UP);
   //hal_gpio_pull_set(GPIO_RED, STRONG_PULL_UP);
   //hal_gpio_pull_set(GPIO_YELLOW, STRONG_PULL_UP);
+  
+  osal_start_reload_timer( AppWrist_TaskID, TIMER_RGBLED_REFLASH_EVT , 50);
   return PPlus_SUCCESS;
 }
 
