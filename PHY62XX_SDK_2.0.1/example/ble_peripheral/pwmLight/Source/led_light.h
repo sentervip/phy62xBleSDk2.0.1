@@ -42,6 +42,7 @@
 #define us20 (us5*18)//(us5*18)
 #define LEDOUT    18
 #define RGBOUT    20
+extern uint8_t s_rgb[3];
 void ctrl_led(int level);
 void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char g,unsigned  char b);
 void light_timeout_handle(void);

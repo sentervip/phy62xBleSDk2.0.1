@@ -178,18 +178,16 @@ static gaprole_States_t gapProfileState = GAPROLE_INIT;
 //};
 static uint8 scanData[] =
 {
-    0xc,   // length of this data
+    0xa,   // length of this data
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-  'D',
-  'I',
-  'A',
+  'M',
+  'a',
+  'g',
+  'i',
+  'c',
   'L',
-  'O',
-  'G',
-  '_',
-  '2',
-  '0',
-  '1',
+  'e',
+  'd',
   ' ',
 };
 void on_touchKey(touch_evt_t key_evt)
@@ -212,7 +210,7 @@ static uint8 advertData[] =
 
 // Device name attribute value
 //static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "PhyLight";
-static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "DIALOG_201";
+static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "MagicLed";
 // GAP connection handle
 static uint16 gapConnHandle;
 
@@ -474,7 +472,7 @@ uint16 appWristProcEvt( uint8 task_id, uint16 events )
 
   if( events & TIMER_RGBLED_REFLASH_EVT)
   {
-      ctrl_rgb(0,0,32,0,50);  //LOG("40ms");
+      ctrl_rgb(0,0,s_rgb[0],s_rgb[1],s_rgb[2]);  //LOG("40ms");
       return ( events ^ TIMER_RGBLED_REFLASH_EVT);
   }
   

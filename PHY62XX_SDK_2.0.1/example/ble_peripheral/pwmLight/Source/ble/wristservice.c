@@ -532,23 +532,22 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
 //  case  WRIST_CMD_ACC_NOTIF_STOP:
 //    ret = cmd_acc_notif_stop(data, len);
 //    break;
-//    
+//   
+	
   case  WRIST_CMD_LIGHT_CTRL:
     ret = cmd_light_ctrl(data, len);
-    if(data[3] == 0){
-        ctrl_led(0);
-        //hal_gpio_fast_write(RGBOUT, 0);
-        ctrl_rgb(0,0,32,0x00,0);
-       // ctrl_rgb(0,0,32,0x00,0);
-    }else if(data[3] == 1){
-         ctrl_rgb(0,0,0,32,0);
-        ctrl_led(1);
-    }else{
-        ctrl_rgb(0,0,0,0,32);
-        ctrl_led(0);
-        WaitMs(200);
-        ctrl_led(1);
-    }
+	
+	wristCmdLight_t* pRgb = (wristCmdLight_t*)data;
+	switch(pRgb->ch){
+		case 0: ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; break;
+		case 1: ctrl_led(1); s_rgb[pRgb->ch] = pRgb->value; break;
+		case 2: ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; 
+			    WaitMs(200);
+				ctrl_led(1);
+			    break;			
+		default: break;
+	}
+	LOG("ch:%d, val:%d", pRgb->ch, pRgb->value);
     break;
     
 //  case  WRIST_CMD_MSG_NOTIF:

@@ -38,6 +38,7 @@
 #include "app_wrist.h"
 #include "error.h"
 #include "common.h"
+#include "log.h"
 
 #define GPIO_GREEN    P31//P23
 #define GPIO_YELLOW   P23//P31
@@ -46,13 +47,14 @@
 
 
 static uint16_t s_light[3];
+uint8_t s_rgb[3];
 //static uint8_t s_light_en[3];
 void delay_us(unsigned int t)
 {   
     if(t == 1){
-        //for(unsigned int i=0; i<5;i++)
-          //  for(unsigned int j=0; j<50000;j++);
-        WaitUs(t);
+        for(unsigned int i=0; i<10;i++)
+            for(unsigned int j=0; j<50;j++);
+        //WaitUs(t);
     }else{
         WaitUs(t);
     }
@@ -70,7 +72,7 @@ void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char
 
    // r=0xff;
     
-
+    LOG("a0:%d, a1:%d,r:%d, g:%d, b:%d\n", a0, a1,r,g,b);
     //hal_gpio_pin_init(RGBOUT, OEN);
     hal_gpio_fast_write(RGBOUT, 1);
     tmp=0x1;
