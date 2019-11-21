@@ -494,7 +494,7 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
   LOG("RX Cmd:");
   print_hex(data, len);
   
-  adc_ProcessEvent(adcDemo_TaskID,adcMeasureTask_EVT);
+  //adc_ProcessEvent(adcDemo_TaskID,adcMeasureTask_EVT);  // by aizj
   if(chksum != checksum(data, len-1)){
     err_data = WRIST_CMD_UNKNOW;
     return cmd_response_err(&err_data, sizeof(err_data), APP_ERR_CRC);
@@ -544,7 +544,9 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
 		case 2: ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; 
 			    WaitMs(200);
 				ctrl_led(1);
-			    break;			
+			    break;		
+		case 4: s_rgb[0] = 32; s_rgb[1] = 0;s_rgb[2] = 0;break;	
+		case 5: s_rgb[0] = 0; s_rgb[1] = 32;s_rgb[2] = 0;break;		
 		default: break;
 	}
 	LOG("ch:%d, val:%d", pRgb->ch, pRgb->value);

@@ -72,7 +72,7 @@ void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char
 
    // r=0xff;
     
-    LOG("a0:%d, a1:%d,r:%d, g:%d, b:%d\n", a0, a1,r,g,b);
+    //LOG("a0:%d, a1:%d,r:%d, g:%d, b:%d\n", a0, a1,r,g,b);
     //hal_gpio_pin_init(RGBOUT, OEN);
     hal_gpio_fast_write(RGBOUT, 1);
     tmp=0x1;
