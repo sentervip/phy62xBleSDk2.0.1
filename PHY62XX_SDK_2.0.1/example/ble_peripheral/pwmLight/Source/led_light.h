@@ -42,13 +42,32 @@
 #define us20 (us5*18)//(us5*18)
 #define LEDOUT    18
 #define RGBOUT    20
+#define GPIO_GREEN    P31//P23
+#define GPIO_YELLOW   P23//P31
+#define GPIO_RED      P32
+#define rnb1 16
+#define MODE_NUM  10 
+extern unsigned char mode;
 extern uint8_t s_rgb[3];
 void ctrl_led(int level);
 void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char g,unsigned  char b);
 void light_timeout_handle(void);
 int light_ctrl(uint8_t ch, uint8_t value);
 int light_init(void);
-
+void read_rem( void );
+void md0();
+void md1();
+void md2();
+void md22();
+void md3();
+void md4();
+void md5();
+void md6();
+void md7();
+void md8();
+void play1();
+void read_rem( void );
+void RGB_led_loop(void);
 
 #endif
 

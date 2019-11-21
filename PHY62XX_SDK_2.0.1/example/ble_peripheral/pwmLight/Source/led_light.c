@@ -1,36 +1,3 @@
-/**************************************************************************************************
- 
-  Phyplus Microelectronics Limited confidential and proprietary. 
-  All rights reserved.
-
-  IMPORTANT: All rights of this software belong to Phyplus Microelectronics 
-  Limited ("Phyplus"). Your use of this Software is limited to those 
-  specific rights granted under  the terms of the business contract, the 
-  confidential agreement, the non-disclosure agreement and any other forms 
-  of agreements as a customer or a partner of Phyplus. You may not use this 
-  Software unless you agree to abide by the terms of these agreements. 
-  You acknowledge that the Software may not be modified, copied, 
-  distributed or disclosed unless embedded on a Phyplus Bluetooth Low Energy 
-  (BLE) integrated circuit, either as a product or is integrated into your 
-  products.  Other than for the aforementioned purposes, you may not use, 
-  reproduce, copy, prepare derivative works of, modify, distribute, perform, 
-  display or sell this Software and/or its documentation for any purposes.
-
-  YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-  PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-  INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
-  NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
-  PHYPLUS OR ITS SUBSIDIARIES BE LIABLE OR OBLIGATED UNDER CONTRACT,
-  NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER
-  LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
-  INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE
-  OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT
-  OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
-  (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
-  
-**************************************************************************************************/
-
-
 #include "led_light.h"
 #include "pwm.h"
 #include "OSAL.h"
@@ -39,21 +6,462 @@
 #include "error.h"
 #include "common.h"
 #include "log.h"
-
-#define GPIO_GREEN    P31//P23
-#define GPIO_YELLOW   P23//P31
-#define GPIO_RED      P32
-
-
-
+                                
+unsigned char r2=0,g2=0,b2=0;
+unsigned char  i,k;
+unsigned char j,p,r,g,b,r1,g1,b1,mode=0,br,mode_old=0,res=0;
+unsigned char   cr[]={63,0x00,0x00,63,63,0x00,63};
+unsigned char   cg[]={0x00,63,0x00,63,0x00,63,63};
+unsigned char   cb[]={0x00,0x00,63,0x00,63,63,63};
 static uint16_t s_light[3];
 uint8_t s_rgb[3];
 //static uint8_t s_light_en[3];
+void RGB_led_loop(void)
+{
+    if (mode==0) { md0();}
+    if (mode==1) { md1();}
+    if (mode==2) { md3();}
+    if (mode==3) {r1=0x00;g1=32;b1=0x00;md0(); md5();}
+    if (mode==3) {r1=32;g1=32;b1=0x00;md0(); md5();}
+    if (mode==3) {r1=16;g1=16;b1=16;md0(); md4();}
+    if (mode==3) {r1=32;g1=0x00;b1=16;md0(); md5();}
+    if (mode==4) { md6();}
+    if (mode==5) { md2();}
+    if (mode==6) {r1=32;g1=0;b1=0;md0(); md7();}
+    if (mode==6) {r1=0;g1=32;b1=0;md0(); md7();}
+    if (mode==6) {r1=32;g1=32;b1=0;md0(); md7();}
+    if (mode==6) {r1=32;g1=0;b1=16;md0(); md7();}
+    if (mode==8) { md8();}
+    if (mode==9) { md22();}
+    if (mode==10) { play1();}
+
+
+    if (mode==7) { 
+        if (mode==7) { md1();}
+        if (mode==7) { md3();}
+        if (mode==7) {r1=0x00;g1=32;b1=0x00;md0(); md5();}
+        if (mode==7) {r1=32;g1=32;b1=0x00;md0(); md5();}
+        if (mode==7) {r1=16;g1=16;b1=16;md0(); md4();}
+        if (mode==7) {r1=32;g1=0x00;b1=16;md0(); md5();}
+        if (mode==7) { md6();}
+        if (mode==7) { md2();}
+        if (mode==7) {r1=32;g1=0;b1=0;md0(); md7();}
+        if (mode==7) {r1=0;g1=32;b1=0;md0(); md7();}
+        if (mode==7) {r1=32;g1=32;b1=0;md0(); md7();}
+        if (mode==7) {r1=32;g1=0;b1=16;md0(); md7();}       
+    }
+    if(mode == MODE_NUM+1){
+         ctrl_rgb(0,0,s_rgb[0],s_rgb[1],s_rgb[2]); 
+    }
+}
+void md0()//
+{
+    for(k=0;k<64;k++)   
+    {    
+        if (r2>r1) r2--; else {if (r2<r1) r2++;}
+        if (g2>g1) g2--; else {if (g2<g1) g2++;}
+        if (b2>b1) b2--; else {if (b2<b1) b2++;}
+        ctrl_rgb(0,0,r2,g2,b2); if (res==1) goto m_end;
+        if ((r1==r2)&&(g1==g2)&&(b1==b2)) break;
+    }
+    r2=r1;g2=g1;b2=b1;
+m_end:
+    res=0;
+
+}
+
+void md1()//
+{
+    unsigned char k,j,i,t;
+    for (k=0;k<7;k++)
+    {
+        r=cr[k];g=cg[k];b=cb[k];    
+        i=1; 
+        while(i<64)
+        {   
+            ctrl_rgb(i,0,r,g,b); if (res==1) goto m_end;
+            i+=1;
+        }//i
+        ctrl_rgb(i-1,0,r,g,b); if (res==1) goto m_end;
+
+    }
+m_end:
+    res=0;
+    
+}
+void md2()//shine
+{
+    
+    unsigned char k,j,i,t,r2,g2,b2;
+    for (k=0;k<2;k++)
+    {
+        i=1; 
+        while(i<64)
+        {   
+            j=0;
+            r1=cr[i%6]>>2;g1=cg[i%6]>>2;b1=cb[i%6]>>2;
+            r=r1;g=g1;b=b1;r2=63;g2=63;b2=63;
+            while(j<64)
+            {   
+                j+=1;
+                if (r<63) r++;if (g<63) g++;if (b<63) b++;
+                ctrl_rgb(i,0,r,g,b); if (res==1) goto m_end;
+                if (r2>r1) r2--;if (g2>g1) g2--;if (b2>b1) b2--;
+                if (i==1) t=63; else t=i-1;
+                ctrl_rgb(t,0,r2,g2,b2); if (res==1) goto m_end;
+//j
+            }
+            i+=1;
+        }//i
+    } //k
+////////////////////////////////
+
+m_end:
+    res=0;
+
+}
+void md22()//shine
+{
+    
+    unsigned char k,j,i,t,r2,g2,b2,r3,g3,b3;
+//unsigned char cr1[6],cg1[6],cb1[6];
+//for (t=0;t<6;t++)
+    {
+//  cr1[t]=cr[t];cg1[t]=cg[t];cb1[t]=cb[t];
+    }   
+
+    for (k=0;k<6;k++)
+    {
+        i=0; 
+        while(i<6)
+        {   
+            j=0;
+            r1=cr[(i+2+k)%6];g1=cg[(i+2+k)%6];b1=cb[(i+2+k)%6];
+            r=cr[(i+1+k)%6];g=cg[(i+1+k)%6];b=cb[(i+1+k)%6];
+            r3=cr[(i+0)%6]>>0;g3=cg[(i+0)%6]>>0;b3=cb[(i+0)%6]>>0;
+            r2=r;g2=g;b2=b;
+            while(j<64)
+            {   
+                j+=1;
+                if (r<r1) r++;if (g<g1) g++;if (b<b1) b++;
+                if (r>r1) r--;if (g>g1) g--;if (b>b1) b--;
+//ctrl_rgb((1*i+1)%63+1,0,r,g,b,130); if (res==1) goto m_end;
+                ctrl_rgb(0,(i+1)%6+1,r,g,b); if (res==1) goto m_end;
+                
+                if (r2>r3) r2--;if (g2>g3) g2--;if (b2>b3) b2--;
+                if (r2<r3) r2++;if (g2<g3) g2++;if (b2<b3) b2++;
+//ctrl_rgb((1*i)%63+1,0,r2,g2,b2,130); if (res==1) goto m_end;
+//ctrl_rgb(0,(i%6)+1,r2,g2,b2,330); if (res==1) goto m_end;
+//j
+            }
+            i+=1;
+        }//i
+    } //k
+////////////////////////////////
+
+m_end:
+    res=0;
+
+}
+
+void md3()
+{
+    unsigned char k;
+//r=255;g=10;b=255;
+//ctrl_rgb(0,0,0,255,0,0,1); if (res==1) goto m_end;
+    
+    
+    
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,k,0,0);if (res==1) goto m_end;  
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,63,k,0);if (res==1) goto m_end; 
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,63-k,63,0);if (res==1) goto m_end;  
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,0,63,k);if (res==1) goto m_end; 
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,0,63-k,63);if (res==1) goto m_end;  
+    }
+
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,k,0,63);if (res==1) goto m_end; 
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,63,k,63);if (res==1) goto m_end;    
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,63,63,63-k);if (res==1) goto m_end; 
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,63-k,63,0);if (res==1) goto m_end;  
+    }
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,0,63-k,0);if (res==1) goto m_end;   
+    }
+    
+//////////////////////////////////   
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,k,0,0);if (res==1) goto m_end;  
+    }
+
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,63-k,0x0,0);if (res==1) goto m_end; 
+    }
+/////////////////////
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,0,k,0);if (res==1) goto m_end;  
+    }
+
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,0,63-k,0x0);if (res==1) goto m_end; 
+    }
+///////////////////////////////
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,0,0,k);if (res==1) goto m_end;  
+    }
+
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,0,0x0,63-k);if (res==1) goto m_end; 
+    }
+
+///////////////////////////////
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,k,k,k);if (res==1) goto m_end;  
+    }
+
+    for(k=0;k<64;k++)  
+    {
+        ctrl_rgb(0,0,63-k,63-k,63-k);if (res==1) goto m_end; 
+    }
+
+
+
+m_end:
+    res=0;
+}
+void md4()///shine
+{
+    unsigned char j;
+    i=1;
+    j=0;
+    while (j<2)
+    {
+        i=1;
+        while (i<64)
+        {
+            ctrl_rgb(i,0,0xff,0xff,0x0);if (res==1) goto m_end;
+            ctrl_rgb(i,0,r1,g1,b1);if (res==1) goto m_end;
+            i++;
+        }//i
+        j++;
+    }
+m_end:
+    res=0;
+}
+void md5()///blink
+{
+    unsigned char j;
+    i=1;
+    j=0;
+    while (j<2)
+    {
+        i=1;
+        while (i<64)
+        {
+            ctrl_rgb(i,0,0xff,0xff,0xff);if (res==1) goto m_end;
+            ctrl_rgb(i,0,r1,g1,b1);if (res==1) goto m_end;
+            i++;
+        }//i
+        j++;
+    }
+m_end:
+    res=0;
+
+}
+
+void md6()///blink_multi
+{
+    unsigned char t;
+    for(k=0;k<3;k++)
+    {
+        j=0;
+        while (j<2)
+        {
+            i=1;
+            while (i<64)
+            {
+                r1=cr[i%6];g1=cg[i%6];b1=cb[i%6];
+                ctrl_rgb(i,0,0xff,0xff,0xff);if (res==1) goto m_end;
+                
+                ctrl_rgb(i,0,r1>>2,g1>>2,b1>>2);if (res==1) goto m_end;
+                i++;
+            }//i
+            j++;
+        } //j
+    }
+
+m_end:
+    res=0;
+}
+/*
+void md66()///blink_multi
+ {
+     unsigned char t;
+     for(k=0;k<3;k++)
+     {
+ j=0;
+ while (j<2)
+ {
+  i=1;
+while (i<64)
+{
+    r1=cr[i%6];g1=cg[i%6];b1=cb[i%6];
+ctrl_rgb(i,0,0xff,0xff,0xff);if (res==1) goto m_end;
+     
+ctrl_rgb(i,0,r1>>2,g1>>2,b1>>2);if (res==1) goto m_end;
+i++;
+}//i
+j++;
+} //j
+ }
+
+ m_end:
+  res=0;
+ }
+*/
+
+
+
+void md7()//shine
+{
+    unsigned char k,j,i,t,r2,g2,b2;
+    for (k=0;k<2;k++)
+    {
+        i=0; 
+        while(i<31)
+        {   
+            j=0;
+            r=r1;g=g1;b=b1;r2=63;g2=63;b2=63;
+            while(j<64)
+            {   
+                j+=1;
+                if (r<63) r++;if (g<63) g++;if (b<63) b++;
+                ctrl_rgb((2*i+0)%63+1,0,r,g,b); if (res==1) goto m_end;
+                ctrl_rgb((2*i+1)%63+1,0,r,g,b); if (res==1) goto m_end;
+                if (r2>r1) r2--;if (g2>g1) g2--;if (b2>b1) b2--;
+//if (i==1) t=63; else t=i-1;
+                ctrl_rgb((2*i-1)%63+1,0,r2,g2,b2); if (res==1) goto m_end;
+                ctrl_rgb((2*i-2)%63+1,0,r2,g2,b2); if (res==1) goto m_end;
+//j
+            }
+            i+=1;
+        }//i
+    } //k
+////////////////////////////////
+
+m_end:
+    res=0;
+    ///////////////////////////////////////////
+}
+void read_rem( void )
+{
+// unsigned char i;
+    mode++;
+    if (mode > MODE_NUM) mode=0;
+    if (mode!=mode_old)    {res=1;mode_old=mode;}
+}
+
+
+void md8()///shine
+{
+    unsigned char j;
+    unsigned char m[14];
+    char tmp,i;
+    
+    j=1;
+    m[0]=10;m[1]=20;m[2]=30;m[3]=40;m[4]=50;m[5]=60;
+    m[6]=50;m[7]=40;m[8]=30;m[9]=20;m[10]=10;m[11]=20;m[12]=30;m[13]=40;
+    for(k=0;k<6;k++)
+    {
+        for(j=1;j<7;j++)
+        {
+            for(i=0;i<10;i++)
+            {
+                if (m[j-1+k+1]== m[j-1+k])  tmp=0;
+                ctrl_rgb(0,j,m[j-1+k]+0-0,0x0,0x0);if (res==1) goto m_end;
+                
+                
+                if (m[j-1+k+1]> m[j-1+k])   //tmp=i;
+//if (m[j-1+k+1]== m[j-1+k])    tmp=0;
+//if (m[j-1+k+1]< m[j-1+k]) tmp=-i;
+
+                    ctrl_rgb(0,j,m[j-1+k]+i-0,0x0,0x0);if (res==1) goto m_end;
+                if (m[j-1+k+1]< m[j-1+k])   //tmp=-i;
+                    ctrl_rgb(0,j,m[j-1+k]-i-0,0x0,0x0);if (res==1) goto m_end;
+            }//i
+        }
+    }
+
+m_end:
+    res=0;
+}
+
+
+
+void play1()
+{
+    
+    unsigned char a,r,g,b;//,t,tt;
+    int k,t,tt;
+
+    //while(1)
+    {
+        for (k=0;k<96;k++)
+        {
+            a=1;
+            while(a<6)
+            {
+                tt=((k+a)/rnb1)%3;
+                t=(k+a)%rnb1;
+                if (tt==0) {r=255-(t*16);g=(t*16);b=0;}
+                if (tt==1) {g=255-(t*16);b=(t*16);r=0;}
+                if (tt==2) {b=255-(t*16);r=(t*16);g=0;}
+                ctrl_rgb(0,a+0,r>>2,g>>2,b>>2);if (res==1) goto m_end;
+                a++;
+            } //while
+        }//for
+    }
+m_end:
+    res=0;
+
+}  
 void delay_us(unsigned int t)
 {   
     if(t == 1){
-        for(unsigned int i=0; i<10;i++)
-            for(unsigned int j=0; j<50;j++);
+        for(unsigned int i=0; i<1;i++)
+            for(unsigned int j=0; j<33;j++);
         //WaitUs(t);
     }else{
         WaitUs(t);
@@ -72,7 +480,7 @@ void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char
 
    // r=0xff;
     
-    //LOG("a0:%d, a1:%d,r:%d, g:%d, b:%d\n", a0, a1,r,g,b);
+    LOG("mode:%d,a0:%d, a1:%d,r:%d, g:%d, b:%d\n", mode,a0, a1,r,g,b);
     //hal_gpio_pin_init(RGBOUT, OEN);
     hal_gpio_fast_write(RGBOUT, 1);
     tmp=0x1;

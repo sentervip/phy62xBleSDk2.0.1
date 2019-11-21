@@ -472,7 +472,8 @@ uint16 appWristProcEvt( uint8 task_id, uint16 events )
 
   if( events & TIMER_RGBLED_REFLASH_EVT)
   {
-      ctrl_rgb(0,0,s_rgb[0],s_rgb[1],s_rgb[2]);  //LOG("40ms");
+      //ctrl_rgb(0,0,s_rgb[0],s_rgb[1],s_rgb[2]);  //LOG("40ms");
+      RGB_led_loop();
       return ( events ^ TIMER_RGBLED_REFLASH_EVT);
   }
   

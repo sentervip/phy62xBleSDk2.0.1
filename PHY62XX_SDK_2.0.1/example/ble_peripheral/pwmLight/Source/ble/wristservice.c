@@ -491,8 +491,8 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
 
   uint8 chksum = data[len-1];
   uint8 err_data = 0;
-  LOG("RX Cmd:");
-  print_hex(data, len);
+  //LOG("RX Cmd:");
+  //print_hex(data, len);
   
   //adc_ProcessEvent(adcDemo_TaskID,adcMeasureTask_EVT);  // by aizj
   if(chksum != checksum(data, len-1)){
@@ -533,23 +533,23 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
 //    ret = cmd_acc_notif_stop(data, len);
 //    break;
 //   
-	
+    
   case  WRIST_CMD_LIGHT_CTRL:
     ret = cmd_light_ctrl(data, len);
-	
-	wristCmdLight_t* pRgb = (wristCmdLight_t*)data;
-	switch(pRgb->ch){
-		case 0: ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; break;
-		case 1: ctrl_led(1); s_rgb[pRgb->ch] = pRgb->value; break;
-		case 2: ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; 
-			    WaitMs(200);
-				ctrl_led(1);
-			    break;		
-		case 4: s_rgb[0] = 32; s_rgb[1] = 0;s_rgb[2] = 0;break;	
-		case 5: s_rgb[0] = 0; s_rgb[1] = 32;s_rgb[2] = 0;break;		
-		default: break;
-	}
-	LOG("ch:%d, val:%d", pRgb->ch, pRgb->value);
+    
+    wristCmdLight_t* pRgb = (wristCmdLight_t*)data;
+    switch(pRgb->ch){
+        case 0: mode= MODE_NUM+1;ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; break;
+        case 1: mode= MODE_NUM+1;ctrl_led(1); s_rgb[pRgb->ch] = pRgb->value; break;
+        case 2: mode= MODE_NUM+1;ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; 
+                //WaitMs(200);
+               // ctrl_led(1);
+                break;      
+        case 40: mode= MODE_NUM+1; s_rgb[0] = 32; s_rgb[1] = 0;s_rgb[2] = 0;break;    
+        case 60: read_rem();break;      
+        default: break;
+    }
+    LOG("ch:%d, val:%d", pRgb->ch, pRgb->value);
     break;
     
 //  case  WRIST_CMD_MSG_NOTIF:
