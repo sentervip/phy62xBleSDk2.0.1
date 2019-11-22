@@ -539,13 +539,10 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
     
     wristCmdLight_t* pRgb = (wristCmdLight_t*)data;
     switch(pRgb->ch){
-        case 0: mode= MODE_NUM+1;ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; break;
-        case 1: mode= MODE_NUM+1;ctrl_led(1); s_rgb[pRgb->ch] = pRgb->value; break;
-        case 2: mode= MODE_NUM+1;ctrl_led(0); s_rgb[pRgb->ch] = pRgb->value; 
-                //WaitMs(200);
-               // ctrl_led(1);
-                break;      
-        case 40: mode= MODE_NUM+1; s_rgb[0] = 32; s_rgb[1] = 0;s_rgb[2] = 0;break;    
+        case 0: mode= MODE_NUM;s_rgb[0] = pRgb->value; break;
+        case 1: mode= MODE_NUM;s_rgb[1] = pRgb->value; break;
+        case 2: mode= MODE_NUM;s_rgb[2] = pRgb->value; break;      
+        case 40: mode= MODE_NUM; s_rgb[0] = 32; s_rgb[1] = 0;s_rgb[2] = 0;break;    
         case 60: read_rem();break;      
         default: break;
     }
@@ -864,7 +861,7 @@ static int wristProfile_Notify(attHandleValueNoti_t *pNoti )
 
   GAPRole_GetParameter(GAPROLE_CONNHANDLE, &connHandle);
   value = GATTServApp_ReadCharCfg( connHandle, wristProfileCmdCCC);
-  LOG("GATT_Notification: %x\n", value);
+  //LOG("GATT_Notification: %x\n", value);
     
   // If notifications enabled
   if ( value & GATT_CLIENT_CFG_NOTIFY )
@@ -875,7 +872,7 @@ static int wristProfile_Notify(attHandleValueNoti_t *pNoti )
   
     // Send the notification
     st = GATT_Notification( connHandle, pNoti, FALSE);
-    LOG("st: %x\n", st);
+    //LOG("st: %x\n", st);
     if(st != SUCCESS)
       return APP_ERR_BLE_SEND_FAIL;
     return APP_SUCCESS;
