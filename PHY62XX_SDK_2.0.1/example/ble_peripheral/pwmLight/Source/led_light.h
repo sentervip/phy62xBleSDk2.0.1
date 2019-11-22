@@ -46,7 +46,7 @@
 #define GPIO_YELLOW   P23//P31
 #define GPIO_RED      P32
 #define rnb1 16
-#define MODE_NUM  10 
+#define MODE_NUM  11 
 extern unsigned char mode;
 extern uint8_t s_rgb[3];
 void ctrl_led(int level);

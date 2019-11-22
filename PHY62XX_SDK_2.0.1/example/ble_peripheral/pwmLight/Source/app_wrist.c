@@ -469,13 +469,6 @@ uint16 appWristProcEvt( uint8 task_id, uint16 events )
 {
   
   VOID task_id; // OSAL required parameter that isn't used in this function
-
-  if( events & TIMER_RGBLED_REFLASH_EVT)
-  {
-      //ctrl_rgb(0,0,s_rgb[0],s_rgb[1],s_rgb[2]);  //LOG("40ms");
-      RGB_led_loop();
-      return ( events ^ TIMER_RGBLED_REFLASH_EVT);
-  }
   
   if ( events & SYS_EVENT_MSG )
   {
@@ -564,6 +557,12 @@ uint16 appWristProcEvt( uint8 task_id, uint16 events )
 //    return ( events ^ TIMER_KSCAN_DEBOUNCE_EVT);
 //  }
   // Discard unknown events
+  if( events & TIMER_RGBLED_REFLASH_EVT)
+  {
+      //ctrl_rgb(0,0,s_rgb[0],s_rgb[1],s_rgb[2]);  //LOG("40ms");
+      RGB_led_loop();
+      return ( events ^ TIMER_RGBLED_REFLASH_EVT);
+  }
   return 0;
 }
 

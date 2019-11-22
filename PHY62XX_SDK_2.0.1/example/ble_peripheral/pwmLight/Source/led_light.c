@@ -15,6 +15,7 @@ unsigned char   cg[]={0x00,63,0x00,63,0x00,63,63};
 unsigned char   cb[]={0x00,0x00,63,0x00,63,63,63};
 static uint16_t s_light[3];
 uint8_t s_rgb[3];
+uint16_t cnt = 0;
 //static uint8_t s_light_en[3];
 void RGB_led_loop(void)
 {
@@ -50,9 +51,12 @@ void RGB_led_loop(void)
         if (mode==7) {r1=32;g1=32;b1=0;md0(); md7();}
         if (mode==7) {r1=32;g1=0;b1=16;md0(); md7();}       
     }
-    if(mode == MODE_NUM+1){
+    if(mode == MODE_NUM){
          ctrl_rgb(0,0,s_rgb[0],s_rgb[1],s_rgb[2]); 
     }
+	if((cnt++ % 50) == 0){
+	    LOG("mode:%d,r:%d, g:%d, b:%d\n", mode,s_rgb[0],s_rgb[1],s_rgb[2]);
+	}
 }
 void md0()//
 {
@@ -111,7 +115,7 @@ void md2()//shine
                 ctrl_rgb(t,0,r2,g2,b2); if (res==1) goto m_end;
 //j
             }
-            i+=1;
+            i+10;// by aizj md i+=1;
         }//i
     } //k
 ////////////////////////////////
@@ -154,7 +158,7 @@ void md22()//shine
 //ctrl_rgb(0,(i%6)+1,r2,g2,b2,330); if (res==1) goto m_end;
 //j
             }
-            i+=1;
+            i+=10;// by aizj md i+=1;
         }//i
     } //k
 ////////////////////////////////
@@ -480,7 +484,7 @@ void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char
 
    // r=0xff;
     
-    LOG("mode:%d,a0:%d, a1:%d,r:%d, g:%d, b:%d\n", mode,a0, a1,r,g,b);
+    //LOG("mode:%d,a0:%d, a1:%d,r:%d, g:%d, b:%d\n", mode,a0, a1,r,g,b);
     //hal_gpio_pin_init(RGBOUT, OEN);
     hal_gpio_fast_write(RGBOUT, 1);
     tmp=0x1;
