@@ -15,6 +15,8 @@ unsigned char   cg[]={0x00,63,0x00,63,0x00,63,63};
 unsigned char   cb[]={0x00,0x00,63,0x00,63,63,63};
 static uint16_t s_light[3];
 uint8_t s_rgb[3];
+
+#if RGB_LED_LOOP
 uint16_t cnt = 0;
 //static uint8_t s_light_en[3];
 void RGB_led_loop(void)
@@ -389,6 +391,8 @@ m_end:
     res=0;
     ///////////////////////////////////////////
 }
+
+
 void read_rem( void )
 {
 // unsigned char i;
@@ -459,8 +463,9 @@ void play1()
     }
 m_end:
     res=0;
-
 }  
+#endif  //end RGB_LED_LOOP
+
 void delay_us(unsigned int t)
 {   
     if(t == 1){
@@ -471,10 +476,73 @@ void delay_us(unsigned int t)
         WaitUs(t);
     }
 }
-void ctrl_led(int level)
+void init_rgb(void)
 {
-    
-    hal_gpio_fast_write(LEDOUT, level);
+	//hal_gpio_pull_set(RGBOUT, WEAK_PULL_UP);
+//	hal_gpio_pin_init(LEDOUT, OEN); 
+	hal_gpio_pin_init(PIO1, OEN); 
+	hal_gpio_pin_init(PIO2, OEN); 
+	hal_gpio_pin_init(PIO3, OEN); 
+	hal_gpio_pin_init(PIO4, OEN); 
+	hal_gpio_pin_init(RGBOUT, OEN);
+}
+void SetMode(int mode)
+{
+   switch(mode){
+	case CMD_COLOR1:
+			 hal_gpio_fast_write(PIO4, 0);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 0); hal_gpio_fast_write(PIO1, 1);
+			 break;
+	 case CMD_COLOR2:
+			 hal_gpio_fast_write(PIO4, 0);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 0);
+			 break;	 
+	 case CMD_COLOR3:
+			 hal_gpio_fast_write(PIO4, 0);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 1);
+			 break;
+	 case CMD_COLOR4:
+			 hal_gpio_fast_write(PIO4, 0);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 0);
+			 break;	 		
+	 case CMD_COLOR5:
+			 hal_gpio_fast_write(PIO4, 0);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 1);
+			 break;
+	 case CMD_COLOR6:
+			 hal_gpio_fast_write(PIO4, 0);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 0);
+			 break;
+	 case CMD_MODE1://9
+			 hal_gpio_fast_write(PIO4, 1);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 0); hal_gpio_fast_write(PIO1, 1);
+			 break;				 
+	 case CMD_MODE2://10
+			 hal_gpio_fast_write(PIO4, 1);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 0);
+			 break;				 
+	 case CMD_MODE3://11
+			 hal_gpio_fast_write(PIO4, 1);hal_gpio_fast_write(PIO3, 0); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 1);
+			 break;				 
+	case CMD_MODE4://12
+			 hal_gpio_fast_write(PIO4, 1);hal_gpio_fast_write(PIO3, 1); 
+			 hal_gpio_fast_write(PIO2, 0); hal_gpio_fast_write(PIO1, 0);
+			 break;		 
+	case CMD_MODE5://13
+			 hal_gpio_fast_write(PIO4, 1);hal_gpio_fast_write(PIO3, 1); 
+			 hal_gpio_fast_write(PIO2, 0); hal_gpio_fast_write(PIO1, 1);
+			 break;				 
+	case CMD_MODE6://14
+			 hal_gpio_fast_write(PIO4, 1);hal_gpio_fast_write(PIO3, 1); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 0);
+			 break;	
+    case CMD_MODEOFF://15
+			 hal_gpio_fast_write(PIO4, 1);hal_gpio_fast_write(PIO3, 1); 
+			 hal_gpio_fast_write(PIO2, 1); hal_gpio_fast_write(PIO1, 1);
+			 break;			 
+	default: break;
+	}
 }
 
 void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char g,unsigned  char b)

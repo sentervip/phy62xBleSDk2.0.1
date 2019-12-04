@@ -102,9 +102,7 @@ static void hal_init(void)
   
   hal_gpio_init();
   hal_adc_init();
-  hal_gpio_pin_init(LEDOUT, OEN);   
-  hal_gpio_pin_init(RGBOUT, OEN);
-  //hal_gpio_pull_set(RGBOUT, WEAK_PULL_UP);
+  init_rgb();
     console_init(s_cmd_list, cons_callback);
     
   LOG("all driver init OK!\n");

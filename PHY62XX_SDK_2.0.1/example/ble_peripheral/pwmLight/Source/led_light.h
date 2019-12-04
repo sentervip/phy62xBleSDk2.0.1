@@ -40,16 +40,42 @@
 #define us5 1
 #define us10 (us5*2)
 #define us20 (us5*18)//(us5*18)
-#define LEDOUT    18
+
+//key and pio ctrl x4 for ble+stc mcu 
+#define KEY_1     15
+#define PIO1      23
+#define PIO2      24
+#define PIO3      25
+#define PIO4      18
+
+//ble board
+//#define LEDOUT    18
 #define RGBOUT    20
-#define GPIO_GREEN    P31//P23
-#define GPIO_YELLOW   P23//P31
-#define GPIO_RED      P32
+#define GPIO_GREEN    P31//P23 by aizj md
+#define GPIO_YELLOW   P32//P31
+#define GPIO_RED      P33
+
 #define rnb1 16
 #define MODE_NUM  11 
+enum enCOLORTag{
+   CMD_COLOR1=40,
+   CMD_COLOR2,
+	 CMD_COLOR3,
+	 CMD_COLOR4,
+	 CMD_COLOR5,
+	 CMD_COLOR6,
+	 CMD_MODE1=60,
+	 CMD_MODE2,
+	 CMD_MODE3,
+	 CMD_MODE4,
+	 CMD_MODE5,
+	 CMD_MODE6,	
+   CMD_MODEOFF,	
+};
 extern unsigned char mode;
 extern uint8_t s_rgb[3];
 void ctrl_led(int level);
+void init_rgb(void);
 void ctrl_rgb(unsigned  char a0,unsigned  char a1,unsigned  char r,unsigned char g,unsigned  char b);
 void light_timeout_handle(void);
 int light_ctrl(uint8_t ch, uint8_t value);

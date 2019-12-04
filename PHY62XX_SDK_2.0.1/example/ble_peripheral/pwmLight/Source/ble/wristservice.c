@@ -535,17 +535,24 @@ int on_recieved_cmd_packet(const uint8* data, uint16 len)
 //   
     
   case  WRIST_CMD_LIGHT_CTRL:
-    ret = cmd_light_ctrl(data, len);
-    
+	  //ret = cmd_light_ctrl(data, len); // by aizj md    
     wristCmdLight_t* pRgb = (wristCmdLight_t*)data;
+	
+#if RGB_LED_LOOP	
     switch(pRgb->ch){
+	
         case 0: mode= MODE_NUM;s_rgb[0] = pRgb->value; break;
         case 1: mode= MODE_NUM;s_rgb[1] = pRgb->value; break;
         case 2: mode= MODE_NUM;s_rgb[2] = pRgb->value; break;      
         case 40: mode= MODE_NUM; s_rgb[0] = 32; s_rgb[1] = 0;s_rgb[2] = 0;break;    
         case 60: read_rem();break;      
         default: break;
-    }
+		}
+#else
+	if( pRgb->ch >=CMD_COLOR1 && pRgb->ch <= CMD_MODEOFF){
+	    SetMode(pRgb->ch);
+	}		
+#endif
     LOG("ch:%d, val:%d", pRgb->ch, pRgb->value);
     break;
     
